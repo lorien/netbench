@@ -1,0 +1,21 @@
+*.pyc
+*.pyo
+*.swp
+*.swo
+*.orig
+
+# Local symlink to ioweb
+/ioweb
+/src/
+
+# Files of different tools
+/perf.data
+/perf.data.old
+
+# Local development files
+/.env/
+/test.py
+/test_*.py
+
+# Trash
+/var/
