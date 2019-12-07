@@ -2,18 +2,19 @@ from gevent import monkey
 monkey.patch_all()
 from ioweb import Crawler, Request
 
-from util import run_threads, DEFAULT_HEADERS
+from util import DEFAULT_HEADERS
 
 
 class TestCrawler(Crawler):
-    def __init__(self, taskq, *args, **kwargs):
-        self.test_taskq = taskq
+    def __init__(self, taskq, verify, *args, **kwargs):
+        self.local_taskq = taskq
+        self.local_verify = verify
         super(TestCrawler, self).__init__(*args, **kwargs)
 
     def task_generator(self):
         while True:
             try:
-                url = self.test_taskq.pop()
+                url = self.local_taskq.pop()
             except IndexError:
                 break
             else:
@@ -21,6 +22,7 @@ class TestCrawler(Crawler):
                     name='page',
                     url=url,
                     headers=DEFAULT_HEADERS,
+                    verify=self.local_verify,
                 )
 
     def handler_page(self, req, res):
@@ -31,5 +33,5 @@ class TestCrawler(Crawler):
 
 
 def run(taskq, ncur):
-    bot = TestCrawler(taskq, network_threads=ncur)
+    bot = TestCrawler(taskq, True, network_threads=ncur)
     bot.run()

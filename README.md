@@ -1,6 +1,6 @@
 # Network Libraries Benchmark
 
-Testing time and CPU usage by python networ libraries.
+Testing time and CPU usage by python network libraries.
 
 
 ## Installation

@@ -8,7 +8,7 @@ started=$(date +%s%N)
 test_pid=$!
 perf stat -p $test_pid -o var/runtest.perf &
 perf_pid=$!
-py-spy record -o var/runtest.svg -p $test_pid &
+py-spy record --nonblocking -o var/runtest.svg -p $test_pid &
 spy_pid=$!
 
 wait $test_pid
