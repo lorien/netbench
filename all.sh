@@ -6,5 +6,5 @@ echo $NCUR > var/config.ncur
 echo $NTASK > var/config.ntask
 while read case; do
     ./profile.sh $case $NCUR $NTASK
-done <cases_list
+done <config
 ./render_result.py

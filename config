@@ -3,6 +3,8 @@ socket_gevent
 urllib
 urllib3_nocertifi
 urllib3_certifi
+urllib3_124_certifi
+httplib2
 ioweb_noverify
 ioweb_verify
 grab_threaded_pycurl_noverify

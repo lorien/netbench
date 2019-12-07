@@ -18,7 +18,7 @@ def main():
     with open('var/config.ntask') as inp:
         config['ntask'] = int(inp.read())
     cases = []
-    with open('cases_list') as inp:
+    with open('config') as inp:
         names = inp.read().splitlines()
     for name in names:
         with open('var/%s.cpu' % name) as inp:

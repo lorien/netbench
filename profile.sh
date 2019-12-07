@@ -24,6 +24,7 @@ cpu_perc=$(python -c "print(round($cpu * 100, 1))")
 echo "CPU: $cpu_perc"
 echo $cpu_perc > var/runtest.cpu
 echo $cpu_perc > var/$ENGINE.cpu
+cp var/runtest.perf var/$ENGINE.perf
 
 wait $spy_pid
 cp var/runtest.svg var/$ENGINE.svg

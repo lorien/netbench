@@ -13,7 +13,7 @@
 /perf.data.old
 
 # Local development files
-/.env/
+/.env*
 /test.py
 /test_*.py
 /sync.sh

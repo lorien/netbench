@@ -1,4 +1,6 @@
-from urllib3 import PoolManager
+import logging
+
+from urllib3 import PoolManager, __version__
 import certifi
 
 from util import run_threads, DEFAULT_HEADERS
