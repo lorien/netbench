@@ -4,7 +4,16 @@ import os
 from jinja2 import Template
 
 TPL_PAGE = '''
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
+    <style>
+    .github-fork-ribbon:before {
+        background-color: #333;
+    }
+    </style>
+</head>
 <body>
+<a class="github-fork-ribbon" href="https://github.com/lorien/netbench" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
 <div style="">
     {% for case in cases %}
     <a href="#case-{{ case.name }}">

@@ -1,6 +1,6 @@
 # Network Libraries Benchmark
 
-This project is about testing time and CPU usage of different network libraries.
+Testing time and CPU usage by python networ libraries.
 
 
 ## Installation
