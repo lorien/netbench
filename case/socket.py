@@ -47,13 +47,9 @@ def worker(taskq):
                         else:
                             break
                     data = inp.getvalue()
-                    head, body = data.split(b'\r\n\r\n', 1)
-                    status_line = head.split(b'\r\n', 1)[0].decode()
-                    status = status_line.split(' ')[1]
+                    status_line = data[:data.index(b'\r\n')]
+                    status = status_line.split(b' ')[1].decode()
                     print('%s => %d bytes' % (status, len(data)))
-                    #print(head.decode('utf-8'))
-                    #print('-' * 10)
-                    #print(body.decode('utf-8', 'ignore'))
                 finally:
                     sock.close()
 

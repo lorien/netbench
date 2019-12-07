@@ -11,12 +11,16 @@ def main():
         shutil.rmtree(result_dir)
     os.makedirs(result_dir)
     os.makedirs(result_dir + '/files')
+
+    config = {}
+    with open('var/config.ncur') as inp:
+        config['ncur'] = int(inp.read())
+    with open('var/config.ntask') as inp:
+        config['ntask'] = int(inp.read())
     cases = []
-    for name in (
-            'socket', 'urllib',
-            'urllib3_nocertifi', 'urllib3_certifi',
-            'ioweb_noverify', 'ioweb_verify',
-        ):
+    with open('cases_list') as inp:
+        names = inp.read().splitlines()
+    for name in names:
         with open('var/%s.cpu' % name) as inp:
             cpu = inp.read().strip()
         with open('var/%s.time' % name) as inp:
@@ -30,7 +34,10 @@ def main():
             'var/%s.svg' % name,
             'var/result/files/%s.svg' % name
         )
-    page = env.get_template('result.html').render(cases=cases)
+    page = env.get_template('result.html').render(
+        config=config,
+        cases=cases,
+    )
     with open(result_dir + '/index.html', 'w') as out:
         out.write(page)
 

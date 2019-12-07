@@ -1,0 +1,8 @@
+socket
+socket_gevent
+urllib
+urllib3_nocertifi
+urllib3_certifi
+ioweb_noverify
+ioweb_verify
+grab_threaded_pycurl_noverify

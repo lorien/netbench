@@ -1,6 +1,10 @@
 #!/bin/bash
-CASES="socket urllib urllib3_nocertifi urllib3_certifi ioweb_noverify ioweb_verify"
-for case in $CASES; do
-    ./profile.sh $case 10 100
-done
+CASES=""
+NCUR=10
+NTASK=100
+echo $NCUR > var/config.ncur
+echo $NTASK > var/config.ntask
+while read case; do
+    ./profile.sh $case $NCUR $NTASK
+done <cases_list
 ./render_result.py
