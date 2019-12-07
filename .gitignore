@@ -16,6 +16,7 @@
 /.env/
 /test.py
 /test_*.py
+/sync.sh
 
 # Trash
 /var/

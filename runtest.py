@@ -13,7 +13,6 @@ def main():
     mod = import_module('case.%s' % opts.test_case)
 
     print('Loading tasks into queue')
-    from queue import Queue, Empty
     taskq = []
     for _ in range(opts.num_tasks):
         taskq.append('https://en.wikipedia.org/wiki/Python_(programming_language)')

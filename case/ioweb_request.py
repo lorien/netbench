@@ -1,4 +1,4 @@
-from urllib3 import PoolManager
+from ioweb import request
 
 from util import run_threads, DEFAULT_HEADERS
 
@@ -10,12 +10,8 @@ def worker(taskq):
         except IndexError:
             break
         else:
-            mgr = PoolManager()
-            res = mgr.request('GET', url, headers=DEFAULT_HEADERS)
-            print('%s => %d bytes' % (
-                res.status,
-                len(res.data),
-            ))
+            res = request(url, headers=DEFAULT_HEADERS)
+            print(res.status)
 
 
 def run(taskq, ncur):

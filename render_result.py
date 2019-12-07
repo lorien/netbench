@@ -27,7 +27,8 @@ TPL_PAGE = '''
                 &ndash;
                 {{ case.elapsed }} sec
             </h2>
-            <img src="files/{{ case.name }}.svg">
+            <object type="image/svg+xml" data="files/{{ case.name }}.svg">
+            </object>
         </div>
     {% endfor %}
 </div>
@@ -43,9 +44,9 @@ def main():
     cases = []
     for name in ('socket', 'urllib', 'urllib3', 'ioweb'):
         with open('var/%s.cpu' % name) as inp:
-            cpu = inp.read()
+            cpu = inp.read().strip()
         with open('var/%s.time' % name) as inp:
-            elapsed = inp.read()
+            elapsed = inp.read().strip()
         cases.append({
             'name': name,
             'cpu': cpu,

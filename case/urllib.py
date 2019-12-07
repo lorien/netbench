@@ -14,8 +14,11 @@ def worker(taskq):
             for key, val in DEFAULT_HEADERS.items():
                 req.add_header(key, val)
             res = urlopen(req)
-            res.read()
-            print(res.getcode())
+            data = res.read()
+            print('%s => %d bytes' % (
+                res.getcode(),
+                len(data),
+            ))
 
 
 def run(taskq, ncur):

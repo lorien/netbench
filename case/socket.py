@@ -14,6 +14,8 @@ def worker(taskq):
         else:
             scheme, rest = url.split('://', 1)
             hostname = rest.split('/')[0].split('?')[0]
+            path = url.split(hostname, 1)[1]
+
             port = 443 if scheme == 'https' else 80
             ctx = ssl.create_default_context()
 
@@ -25,11 +27,12 @@ def worker(taskq):
                     sock = raw_sock
                 try:
                     sock.sendall(
-                        b'GET /robots.txt HTTP/1.1\r\n'
+                        b'GET %s HTTP/1.1\r\n'
                         b'Host: %s\r\n'
                         b'%s\r\n'
                         b'\r\n'
                         % (
+                            path.encode(),
                             hostname.encode(),
                             ('\r\n'.join(
                                 '%s: %s' % x for x in DEFAULT_HEADERS.items()
@@ -38,7 +41,7 @@ def worker(taskq):
                     )
                     inp = BytesIO()
                     while True:
-                        data = sock.recv(1024)
+                        data = sock.recv(2**16)
                         if data:
                             inp.write(data)
                         else:
@@ -47,7 +50,7 @@ def worker(taskq):
                     head, body = data.split(b'\r\n\r\n', 1)
                     status_line = head.split(b'\r\n', 1)[0].decode()
                     status = status_line.split(' ')[1]
-                    print(status)
+                    print('%s => %d bytes' % (status, len(data)))
                     #print(head.decode('utf-8'))
                     #print('-' * 10)
                     #print(body.decode('utf-8', 'ignore'))
