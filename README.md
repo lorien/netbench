@@ -1,7 +1,7 @@
 # Network Libraries Benchmark
 
-Comparison of time, cpu, memory usage by different network libraries.
-
+Test compares time, cpu and memory usage by different combination of 
+multithreading and network libraries.
 
 ## Installation
 
