@@ -6,9 +6,9 @@ import certifi
 from util import run_threads, DEFAULT_HEADERS
 
 
-def make_request(url, use_certify):
+def make_request(url, use_certify, cert_reqs='CERT_REQUIRED'):
     mgr = PoolManager(
-        cert_reqs='CERT_REQUIRED',
+        cert_reqs=cert_reqs,
         ca_certs=(
             certifi.where() if use_certify else None
         ),

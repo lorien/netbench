@@ -6,6 +6,10 @@ urllib3_certifi
 urllib3_certifi_gevent
 urllib3_124_certifi
 urllib3_noopenssl_certifi
+urllib3_noverify
+urllib3_noverify_gevent
 httplib2
 ioweb_noverify
 ioweb_verify
+ioweb_threaded_noverify
+ioweb_threaded_verify

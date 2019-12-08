@@ -4,9 +4,10 @@
 *.swo
 *.orig
 
-# Local symlink to ioweb
+# Local Source of Dependencies
 /ioweb
 /src/
+/urllib3
 
 # Files of different tools
 /perf.data
@@ -17,6 +18,7 @@
 /test.py
 /test_*.py
 /sync.sh
+/.hg/
 
 # Trash
 /var/

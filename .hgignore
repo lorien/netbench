@@ -5,12 +5,23 @@ syntax:glob
 *.swo
 *.orig
 
-project/settings_local.py
-pip-log.txt
-
 syntax:regexp
-^\.env/
-^var/
-^dump/
-^src/
+
+# Local Source of Dependencies
 ^ioweb$
+^src/
+^urllib3$
+
+# Files of different tools
+^perf\.data
+^perf\.data.old
+
+# Local development files
+^\.env.*
+^test\.py
+^test_.*\.py
+^sync\.sh
+^\.git/
+
+# Trash
+^var/

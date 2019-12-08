@@ -36,6 +36,7 @@ def main():
             'var/%s.svg' % name,
             'var/result/files/%s.svg' % name
         )
+    cases = sorted(cases, key=lambda x: float(x['stat']['tuser']))
     page = env.get_template('result.html').render(
         config=config,
         cases=cases,

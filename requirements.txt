@@ -6,3 +6,4 @@ gevent
 grab
 ioweb
 httplib2
+py-spy
