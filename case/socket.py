@@ -1,8 +1,11 @@
 import socket
 import ssl
 from io import BytesIO
+import gzip
 
 from util import run_threads, DEFAULT_HEADERS
+
+GZIP_SIGNATURE = b'\x1f\x8b'
 
 
 def worker(taskq):
@@ -47,9 +50,19 @@ def worker(taskq):
                         else:
                             break
                     data = inp.getvalue()
-                    status_line = data[:data.index(b'\r\n')]
+                    data_view = memoryview(data)
+                    status_line = bytes(data_view[:data.index(b'\r\n')])
+                    delimiter = b'\r\n\r\n'
+                    split_pos = data.index(delimiter)
+                    head = data_view[:split_pos]
+                    body = data_view[(split_pos + len(delimiter)):]
+                    if bytes(body[:2]) == GZIP_SIGNATURE:
+                        body = gzip.decompress(body)
                     status = status_line.split(b' ')[1].decode()
-                    print('%s => %d bytes' % (status, len(data)))
+                    print('%s => %d bytes' % (
+                        status,
+                        len(head) + len(delimiter) + len(body)
+                    ))
                 finally:
                     sock.close()
 

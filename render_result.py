@@ -21,14 +21,16 @@ def main():
     with open('config') as inp:
         names = inp.read().splitlines()
     for name in names:
-        with open('var/%s.cpu' % name) as inp:
-            cpu = inp.read().strip()
-        with open('var/%s.time' % name) as inp:
-            elapsed = inp.read().strip()
+        with open('var/%s.stat' % name) as inp:
+            stat = dict(
+                x.split('=') for x in
+                inp.read().strip().split(',')
+            )
+            stat['cpu'] = stat['cpu'].rstrip('%')
+            stat['rss'] = int(round(int(stat['rss']) / 1024))
         cases.append({
             'name': name,
-            'cpu': cpu,
-            'elapsed': elapsed,
+            'stat': stat,
         })
         shutil.copy(
             'var/%s.svg' % name,

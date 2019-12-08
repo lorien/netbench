@@ -2,29 +2,36 @@
 ENGINE="$1"
 CONCURRENCY="$2"
 NUM_TASKS="$3"
+PID_FILE="var/runtest.pid"
 
-started=$(date +%s%N)
-./runtest.py $ENGINE -c $CONCURRENCY -n $NUM_TASKS &
-test_pid=$!
-perf stat -p $test_pid -o var/runtest.perf &
-perf_pid=$!
-py-spy record --nonblocking -o var/runtest.svg -p $test_pid &
-spy_pid=$!
+if [ -e $PID_FILE ]; then rm $PID_FILE; fi
 
-wait $test_pid
-ended=$(date +%s%N)
-elapsed=$(python -c "print(round(($ended - $started)/1000000000, 3))")
+# P      Percentage of the CPU that this job got.  This is just user + system times divided by the total running time.  It also prints a percentage sign.
+# e      Elapsed real (wall clock) time used by the process, in seconds.
+# M      Maximum resident set size of the process during its lifetime, in Kilobytes.
+# c      Number of times the process was context-switched involuntarily (because the time slice expired).
+# w      Number of times that the program was context-switched voluntarily, for instance while waiting for an I/O operation to complete.
+# S      Total number of CPU-seconds used by the system on behalf of the process (in kernel mode), in seconds.
+# U      Total number of CPU-seconds that the process used directly (in user mode), in seconds.
+
+STAT_FORMAT="tsys=%S,tuser=%U,ttotal=%e,cpu=%P,rss=%M,swvol=%c,swinvol=%w"
+/usr/bin/time -f $STAT_FORMAT -o var/runtest.stat -- ./runtest.py $ENGINE -c $CONCURRENCY -n $NUM_TASKS --pid-file $PID_FILE &
+TIME_PID=$!
+
+while [ ! -f $PID_FILE ]; do sleep 0.001; done
+TEST_PID=$(cat $PID_FILE)
+
+# redirect out/err py-spy output into file because overwise it deletes (!)
+# output of other programs
+py-spy record -r20 --nonblocking -o var/runtest.svg -p $TEST_PID > var/py_spy.log 2>&1 &
+SPY_PID=$!
+
+wait $TIME_PID
+elapsed=$(cat var/runtest.stat | sed 's/.*ttotal=//' | cut -d, -f1)
+cpu=$(cat var/runtest.stat | sed 's/.*cpu=//' | cut -d, -f1)
 echo "ELAPSED: $elapsed sec"
-echo $elapsed > var/runtest.time
-echo $elapsed > var/$ENGINE.time
+echo "CPU: $cpu"
+cp var/runtest.stat var/$ENGINE.stat
 
-kill -INT $perf_pid
-cpu=$(cat var/runtest.perf  | grep "CPUs utilized" | sed 's/.* \([0-9.]\+\) *CPUs.*/\1/')
-cpu_perc=$(python -c "print(round($cpu * 100, 1))")
-echo "CPU: $cpu_perc"
-echo $cpu_perc > var/runtest.cpu
-echo $cpu_perc > var/$ENGINE.cpu
-cp var/runtest.perf var/$ENGINE.perf
-
-wait $spy_pid
+wait $SPY_PID
 cp var/runtest.svg var/$ENGINE.svg

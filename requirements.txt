@@ -1,3 +1,4 @@
+pyopenssl
 jinja2
 certifi
 urllib3<=1.25.6

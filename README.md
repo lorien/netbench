@@ -1,14 +1,27 @@
 # Network Libraries Benchmark
 
-Testing time and CPU usage by python network libraries.
+Comparison of time, cpu, memory usage by different network libraries.
 
 
 ## Installation
 
-Run `make build`
+* `apt-get install time`
+* `make build`
 
 
 ## Usage
 
-Run `./all.sh`
-To render results in HTML run `./render_result.py`
+* Activate virtualenv `source .env/bin/activate`
+* Run `./all.sh`
+* Wait
+* Open "var/result/index.html" file
+
+
+## Configuration
+
+To change list of running test cases edit "./config" file
+
+
+## Troubleshooting
+
+Try to run test directly without using any profilng tootls: `python3 runtest.py socket`

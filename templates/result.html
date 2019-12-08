@@ -3,20 +3,30 @@
 {% block content %}
 <h1 class="h2 mt-3">Python Network Libraries Benchmark</h1>
 <p class="lead">Threads: {{ config.ncur }}, requests: {{ config.ntask }}</p>
-<table class="table mt-4 col-md-6">
+<table class="table mt-4 col-md-10">
     <thead>
         <tr>
             <th>Test</th>
             <th>CPU</th>
-            <th>Time</th>
+            <th>T.Total</th>
+            <th>T.User</th>
+            <th>T.Sys</th>
+            <th>RSS</th>
+            <th>Switch Vol</th>
+            <th>Switch Invol</th>
         </tr>
     </thead>
     <tbody>
         {% for case in cases %}
         <tr>
             <td><a href="#case-{{ case.name }}">{{ case.name }}</a></td>
-            <td>{{ case.cpu }}%</td>
-            <td>{{ case.elapsed }}</td>
+            <td>{{ case.stat.cpu }}%</td>
+            <td>{{ case.stat.ttotal }}</td>
+            <td>{{ case.stat.tuser }}</td>
+            <td>{{ case.stat.tsys }}</td>
+            <td>{{ case.stat.rss }} Mb</td>
+            <td>{{ case.stat.swvol }}</td>
+            <td>{{ case.stat.swinvol }}</td>
         </tr>
         {% endfor %}
     </tbody>
@@ -28,9 +38,11 @@
     <h3>
         {{ case.name }}:
         &ndash;
-        {{ case.cpu }}% CPU
+        {{ case.stat.cpu }}% CPU
         &ndash;
-        {{ case.elapsed }} sec
+        {{ case.stat.ttotal }} sec
+        &ndash;
+        {{ case.stat.rss }} Mb
     </h3>
     <div class="mt-3">
         <object type="image/svg+xml" data="files/{{ case.name }}.svg"></object>

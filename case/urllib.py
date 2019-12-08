@@ -1,4 +1,5 @@
 from urllib.request import Request, urlopen
+import gzip
 
 from util import run_threads, DEFAULT_HEADERS
 
@@ -14,7 +15,10 @@ def worker(taskq):
             for key, val in DEFAULT_HEADERS.items():
                 req.add_header(key, val)
             res = urlopen(req)
-            data = res.read()
+            if res.info().get('content-encoding') == 'gzip':
+                data = gzip.decompress(res.read())
+            else:
+                data = res.read()
             print('%s => %d bytes' % (
                 res.getcode(),
                 len(data),
