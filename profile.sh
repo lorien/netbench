@@ -14,8 +14,15 @@ if [ -e $PID_FILE ]; then rm $PID_FILE; fi
 # S      Total number of CPU-seconds used by the system on behalf of the process (in kernel mode), in seconds.
 # U      Total number of CPU-seconds that the process used directly (in user mode), in seconds.
 
+if [ "${ENGINE:0:5}" == "pypy:" ]; then
+    PYTHON=".env-pypy/bin/python3"
+    ENGINE="${ENGINE:5}"
+else
+    PYTHON=".env/bin/python3"
+fi
+
 STAT_FORMAT="tsys=%S,tuser=%U,ttotal=%e,cpu=%P,rss=%M,swvol=%c,swinvol=%w"
-/usr/bin/time -f $STAT_FORMAT -o var/runtest.stat -- ./runtest.py $ENGINE -c $CONCURRENCY -n $NUM_TASKS --pid-file $PID_FILE &
+/usr/bin/time -f $STAT_FORMAT -o var/runtest.stat -- $PYTHON runtest.py $ENGINE -c $CONCURRENCY -n $NUM_TASKS --pid-file $PID_FILE &
 TIME_PID=$!
 
 while [ ! -f $PID_FILE ]; do sleep 0.001; done

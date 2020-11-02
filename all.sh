@@ -10,7 +10,7 @@ if [ -n "$EXPLICIT_CASE" ]; then
     ./profile.sh $EXPLICIT_CASE $NCUR $NTASK
 else
     while read case; do
-        ./profile.sh $case $NCUR $NTASK
+        ./profile.sh pypy:$case $NCUR $NTASK
     done <config
 fi
 ./render_result.py
